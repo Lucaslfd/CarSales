@@ -48,11 +48,13 @@ src/
 
 ## Documentation
 
-| category | tools            |
-| -------- | ---------------- |
-| Rotes    | react-router-dom |
-| Style    | tailwindcss      |
-| Icons    | react-icons      |
+| category   | tools            |
+| ---------- | ---------------- |
+| Rotes      | react-router-dom |
+| Style      | tailwindcss      |
+| Icons      | react-icons      |
+| Form       | react-hook-form  |
+| Validation | zod              |
 
 ## Author
 
