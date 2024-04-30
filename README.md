@@ -40,6 +40,7 @@ src/
 |  |--home/
 |  |--login/
 |  |--register/
+|--services/
 ```
 
 ## Technologies Used
