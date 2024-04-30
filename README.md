@@ -29,7 +29,9 @@ src/
 |--assets/
 |  |--logo.png/
 |--componemts/
+|  |--container/
 |  |--header/
+|  |--input/
 |  |--layout/
 |--pages/
 |  |--car/
@@ -55,6 +57,7 @@ src/
 | Icons      | react-icons      |
 | Form       | react-hook-form  |
 | Validation | zod              |
+| Database   | firebase         |
 
 ## Author
 

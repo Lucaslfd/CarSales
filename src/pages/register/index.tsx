@@ -1,10 +1,13 @@
+import { useEffect } from "react";
 import logoImg from "../../assets/logo.png"
 import { Container } from "../../components/container"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../../components/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { auth } from "../../services";
+import { createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
 
 const schema = z.object({
   name: z.string().nonempty("*"),
@@ -15,14 +18,31 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export function Register() {
-
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange"
   })
 
-  const onSubmit = (data: FormData) => {
-    console.log(data)
+  useEffect(() => {
+    async function handleLogout() {
+      await signOut(auth)
+    }
+    handleLogout();
+  }, [])
+
+  async function onSubmit(data: FormData) {
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+    .then(async (user) => {
+      await updateProfile(user.user, {
+        displayName: data.name
+      })
+      console.log("CADASTRADO COM SUCESSO!!")
+      navigate("/dashboard", {replace: true})
+    })
+    .catch((e) => {
+      console.log(e)
+    })
   }
 
   return(
@@ -45,7 +65,7 @@ export function Register() {
               <Input type="password" placeholder="Digite sua senha..." name="password" error={errors.password?.message} register={register}/>
             </div>
 
-            <button type="submit" className="bg-zinc-900 w-full rounded-md text-white h-10 font-medium drop-shadow">Acessar</button>
+            <button type="submit" className="bg-zinc-900 w-full rounded-md text-white h-10 font-medium drop-shadow">Cadastrar</button>
           </form>
           <Link to="/login">Já possui uma conta? Faça o login.</Link>
       </div>
