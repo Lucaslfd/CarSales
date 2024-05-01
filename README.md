@@ -12,7 +12,7 @@ Before you start, you need to have Node.js and npm installed on your machine.
 
 ### Installation
 
-1. Clone the repository: https://github.com/Lucaslfd/car-sale.git
+1. Clone the repository: https://github.com/Lucaslfd/carSales.git
 
 2. Install project dependencies: npm install
 
@@ -33,6 +33,7 @@ src/
 |  |--header/
 |  |--input/
 |  |--layout/
+|--contexts/
 |--pages/
 |  |--car/
 |  |--dashboard/
@@ -40,6 +41,7 @@ src/
 |  |--home/
 |  |--login/
 |  |--register/
+|--routes/
 |--services/
 ```
 
