@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import logoImg from "../../assets/logo.png"
 import { Container } from "../../components/container"
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { auth } from "../../services";
 import { createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
+import { AuthContexts } from "../../contexts/AuthContexts";
 
 const schema = z.object({
   name: z.string().nonempty("*"),
@@ -18,6 +19,8 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export function Register() {
+
+  const { handleInfoUser } = useContext(AuthContexts)
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -36,6 +39,11 @@ export function Register() {
     .then(async (user) => {
       await updateProfile(user.user, {
         displayName: data.name
+      })
+      handleInfoUser({
+        name: data.name,
+        email: data.email,
+        uid: user.user.uid
       })
       console.log("CADASTRADO COM SUCESSO!!")
       navigate("/dashboard", {replace: true})
