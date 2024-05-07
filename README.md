@@ -53,14 +53,15 @@ src/
 
 ## Documentation
 
-| category   | tools            |
-| ---------- | ---------------- |
-| Rotes      | react-router-dom |
-| Style      | tailwindcss      |
-| Icons      | react-icons      |
-| Form       | react-hook-form  |
-| Validation | zod              |
-| Database   | firebase         |
+| category           | tools            |
+| ------------------ | ---------------- |
+| Rotes              | react-router-dom |
+| Style              | tailwindcss      |
+| Icons              | react-icons      |
+| Form               | react-hook-form  |
+| Validation         | zod              |
+| Database           | firebase         |
+| Unique identifiers | uuid             |
 
 ## Author
 

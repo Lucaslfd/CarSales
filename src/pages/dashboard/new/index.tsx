@@ -1,3 +1,4 @@
+import { ChangeEvent, useContext, useState } from "react";
 import { Container } from "../../../components/container";
 import { DashboarHeader } from "../../../components/panelHeader";
 import { FiUpload } from "react-icons/fi";
@@ -5,7 +6,10 @@ import { useForm } from "react-hook-form";
 import { Input } from "../../../components/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { AuthContexts } from "../../../contexts/AuthContexts";
+import { v4 as uuidV4 } from "uuid";
+import { storage } from "../../../services";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 const schema = z.object({
   name: z.string().nonempty("*"),
@@ -21,14 +25,44 @@ const schema = z.object({
 type formData = z.infer<typeof schema>;
 
 export function New() {
+  const { user } = useContext(AuthContexts)
   const { register, handleSubmit, formState: {errors}, reset } = useForm<formData>({
     resolver: zodResolver(schema),
     mode: "onChange"
   })
 
+  async function handleFile(e: ChangeEvent<HTMLInputElement>) {
+    if(e.target.files && e.target.files[0]){
+      const image = e.target.files[0]
+      if (image.type === "image/jpeg" || image.type === "image/png"){
+        // Enviar para o banco
+        await handleUpload(image)
+      } else {
+        alert("Apenas imagem jpeg ou png")
+      }
+    }
+  }
+
+  async function handleUpload(image:File) {
+    if (!user?.uid){
+      return;
+    }
+
+    const currentUid = user?.uid;
+    const uidImage = uuidV4();
+    const uploadRef = ref(storage, `images/${currentUid}/${uidImage}`)
+    uploadBytes(uploadRef, image)
+    .then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((downloadUrl) => {
+        console.log(downloadUrl)
+      })
+    })
+  }
+
   function onSubmit(data: formData) {
     console.log(data)
   }
+
 
   return(
     <Container>
@@ -39,7 +73,7 @@ export function New() {
             <FiUpload size={30} color="#000"/>
           </div>
           <div className="cursor-pointer">
-            <input className="opacity-0 cursor-pointer" type="file" accept="image/"/>
+            <input className="opacity-0 cursor-pointer" type="file" accept="image/" onChange={handleFile}/>
           </div>
         </button>
       </div>
